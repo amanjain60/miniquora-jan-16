@@ -1,0 +1,9 @@
+{% extends 'question/base.html' %}
+{% block title %} All Questions {% endblock %}
+{% block content %} 
+<ul>
+    {% for q in q_list %}
+    <li> {{ q.title }} </li>
+    {% endfor %}
+</ul>
+{% endblock %}

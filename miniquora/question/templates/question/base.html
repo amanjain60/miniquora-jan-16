@@ -1,0 +1,11 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title> {% block page_title %} Questions {% endblock %} </title>
+        <link href="{% static 'question/css/base.css' %}" rel="stylesheet">
+        {% block extrahead %} {% endblock %}
+    </head>
+    <body>
+        {% block content %} {% endblock %}
+    </body>
+</html>
