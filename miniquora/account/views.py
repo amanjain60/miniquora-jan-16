@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
+from .models import MyUser
 
 # Create your views here.
 def hello(request):
@@ -23,7 +24,7 @@ def login(request):
         if not f.is_valid():
             return render(request, 'account/auth/login.html', {'f' : f});
         else:
-            user = authenticate(username = f.cleaned_data['username'], password = f.cleaned_data['password'])
+            user = f.authenticated_user
             auth_login(request, user)
             return redirect(reverse('home', kwargs={'id': user.id}));
 
