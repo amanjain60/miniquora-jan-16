@@ -8,7 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.template import loader
-from .forms import LoginForm, ForgotPassword, SetPasswordForm
+from .forms import LoginForm, ForgotPassword, SetPasswordForm, SignupForm
 from .models import MyUser, create_otp, get_valid_otp_object
 
 # Create your views here.
@@ -79,3 +79,36 @@ def logout(request):
     auth_logout(request)
     return redirect(reverse('login'));
 
+def signup(request):
+    if request.user.is_authenticated():
+        return redirect(reverse('home', kwargs={'id': request.user.id}));
+    if request.method == 'GET':
+        context = { 'f' : SignupForm()};
+        return render(request, 'account/auth/signup.html', context);
+    else:
+        f = SignupForm(request.POST);
+        if not f.is_valid():
+            return render(request, 'account/auth/signup.html', {'f' : f});
+        else:
+            user = f.save(commit = False)
+            user.set_password(f.cleaned_data['password'])
+            user.is_active = False
+            user.save()
+            '''
+            Geneerate OTP for activate account
+            Send EMAIL
+            Show Success Page
+            '''
+            return HttpResponse('ok');
+
+''' Activate Account '''
+@require_GET
+def activate(request, id = None, otp = None):
+    '''
+    Verify id, otp pair
+    Fetch User
+    set user.is_active = True
+    delete otp object
+    Show a success page with login link
+    '''
+    pass
