@@ -18,7 +18,7 @@ def all_questions(request):
 @login_required
 def add_question(request):
     if request.method == 'GET':
-        f = QuestionCreateForm(initial={'title': 'Hey!'})
+        f = QuestionCreateForm()
     else:
         f = QuestionCreateForm(request.POST)
         if f.is_valid():
@@ -27,3 +27,19 @@ def add_question(request):
             question_obj.save()
             return HttpResponse('ok')
     return render(request, 'question/add.html', {'f': f})
+
+@require_http_methods(['GET', 'POST'])
+@login_required
+def edit_question(request, id = None):
+    question_obj = get_object_or_404(Question, id = id)
+    if question_obj.created_by != request.user:
+        raise Http404()
+    if request.method == 'GET':
+        f = QuestionCreateForm(instance = question_obj)
+    else:
+        f = QuestionCreateForm(request.POST, instance = question_obj)
+        if f.is_valid():
+            question_obj = f.save()
+            return HttpResponse('ok')
+    context = { 'f' : f, 'q_id': question_obj.id }
+    return render(request, 'question/edit.html', context)
