@@ -3,9 +3,15 @@
     <head>
         <title> {% block page_title %} Questions {% endblock %} </title>
         <link href="{% static 'question/css/base.css' %}" rel="stylesheet">
+        {% include 'material/includes/material_css.html' %}
         {% block extrahead %} {% endblock %}
     </head>
     <body>
-        {% block content %} {% endblock %}
+        <main class="container">
+            {% block content %} {% endblock %}
+        </main>
+        <script src="{% static 'common/js/jquery-2.2.1.min.js' %}"></script>
+        {% include 'material/includes/material_js.html' %}
+        {% block scripts %} {% endblock %}
     </body>
 </html>
