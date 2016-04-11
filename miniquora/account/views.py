@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from  django.core import serializers
 from django.http import Http404, JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET, require_POST,require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -25,12 +26,11 @@ def login(request):
     else:
         f = LoginForm(request.POST);
         if not f.is_valid():
-            return render(request, 'account/auth/login.html', {'f' : f});
+            return JsonResponse({ 'errors' : f.errors})
         else:
             user = f.authenticated_user
             auth_login(request, user)
-            return redirect(reverse('home', kwargs={'id': user.id}));
-
+            return JsonResponse({'status' : 1 })
 def forgot_password(request):
     if request.user.is_authenticated():
         return redirect(reverse('home', kwargs={'id': request.user.id}));
@@ -112,3 +112,13 @@ def activate(request, id = None, otp = None):
     Show a success page with login link
     '''
     pass
+
+@require_GET
+def get_all_users(request):
+    users = MyUser.objects.all()
+
+    my_list = serializers.serialize("xml", users)
+    return HttpResponse(my_list, content_type="application/xml")
+    data = [ { 'first_name ': user.first_name, 'last_name': user.last_name} for user in users]
+    return JsonResponse({'data': data})
+
