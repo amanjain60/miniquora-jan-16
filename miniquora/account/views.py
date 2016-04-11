@@ -86,7 +86,7 @@ def signup(request):
         context = { 'f' : SignupForm()};
         return render(request, 'account/auth/signup.html', context);
     else:
-        f = SignupForm(request.POST);
+        f = SignupForm(request.POST,request.FILES);
         if not f.is_valid():
             return render(request, 'account/auth/signup.html', {'f' : f});
         else:

@@ -69,4 +69,4 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ['username', 'email', 'phone', 'first_name', 'last_name']
+        fields = ['username', 'email', 'phone', 'first_name', 'last_name', 'profile_pic']

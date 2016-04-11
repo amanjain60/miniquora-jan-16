@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 
 class MyUser(AbstractUser):
     phone = models.CharField(max_length = 10, null = True)
+    profile_pic = models.ImageField(upload_to = 'profile_pics/', null=True, blank=True)
 
 def create_otp(user = None, purpose = None):
     if not user:
